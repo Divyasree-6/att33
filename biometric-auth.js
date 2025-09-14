@@ -3,7 +3,7 @@ class BiometricAuth {
         this.rpId = window.location.hostname;
         this.rpName = "Smart Attendance System";
         this.timeout = 60000;
-        this.userVerification = "required";
+        this.userVerification = "preferred";
     }
 
     // Check if WebAuthn is supported
@@ -76,12 +76,10 @@ class BiometricAuth {
             challenge: challenge,
             allowCredentials: [{
                 id: this.base64ToArrayBuffer(credentialData.rawId),
-                type: 'public-key',
-                transports: ['internal']
+                type: 'public-key'
             }],
             userVerification: this.userVerification,
-            timeout: this.timeout,
-            rpId: this.rpId
+            timeout: this.timeout
         };
 
         try {
@@ -141,7 +139,7 @@ class BiometricAuth {
             challenge: challenge,
             rp: {
                 name: this.rpName,
-                id: window.location.hostname,
+                id: this.rpId,
             },
             user: {
                 id: userId,
@@ -152,15 +150,18 @@ class BiometricAuth {
                 {
                     alg: -7, // ES256
                     type: "public-key"
+                },
+                {
+                    alg: -257, // RS256
+                    type: "public-key"
                 }
             ],
             authenticatorSelection: {
-                authenticatorAttachment: "platform",
                 userVerification: this.userVerification,
                 requireResidentKey: false
             },
             timeout: this.timeout,
-            attestation: "direct"
+            attestation: "none"
         };
 
         try {
