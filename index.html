@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Attendance System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="page active">
+        <div class="animated-bg">
+            <div class="floating-shapes">
+                <div class="shape">🎓</div>
+                <div class="shape">📚</div>
+                <div class="shape">✏️</div>
+                <div class="shape">🏫</div>
+                <div class="shape">📝</div>
+                <div class="shape">🎯</div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="login-card">
+                <h1>🎓 SMART ATTENDANCE SYSTEM</h1>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label for="rollNumber">Roll Number</label>
+                        <input type="text" id="rollNumber" required placeholder="Enter your roll number">
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="btn-primary">Login</button>
+                </form>
+                <div id="loginError" class="error-message"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboardPage" class="page">
+        <header class="header">
+            <div class="container">
+                <div class="header-left">
+                    <h1>🎓 SMART ATTENDANCE</h1>
+                </div>
+                <div class="header-center">
+                    <h2>Welcome, <span id="studentName"></span> 👋</h2>
+                </div>
+                <div class="header-right">
+                    <button id="logoutBtn" class="btn-secondary">LOGOUT🚪</button>
+                </div>
+            </div>
+        </header>
+        
+        <main class="container">
+            <div class="classes-section">
+                <h2>📅 Today's Classes</h2>
+                <div id="classesList" class="classes-grid"></div>
+            </div>
+        </main>
+        
+
+    </div>
+
+    <!-- Attendance Page -->
+    <div id="attendancePage" class="page">
+        <header class="header">
+            <div class="container">
+                <button id="backBtn" class="btn-secondary">← Back to Dashboard</button>
+                <h1>Take Attendance</h1>
+            </div>
+        </header>
+        
+        <main class="container">
+            <div class="attendance-card">
+                <div id="classInfo" class="class-info"></div>
+                
+                <div id="locationCheck" class="step active">
+                    <h3>Location Verification</h3>
+                    <p>Please ensure you are in the correct classroom</p>
+                    <div id="locationResult" class="result-box"></div>
+                    <button id="verifyLocationBtn" class="btn-primary">Verify Location</button>
+                </div>
+
+                <div id="biometricCheck" class="step">
+                    <h3>Biometric Authentication</h3>
+                    <p>Place your finger on the scanner</p>
+                    <div class="biometric-scanner">
+                        <div id="scannerAnimation" class="scanner-circle">
+                            <div class="pulse"></div>
+                            <div class="fingerprint">
+                                <div class="fingerprint-pattern"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="scanBiometricBtn" class="btn-primary">Start Biometric Scan</button>
+                    <div id="biometricResult" class="result-box"></div>
+                </div>
+
+                <div id="attendanceResult" class="step">
+                    <div id="finalResult" class="result-box"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Location Error Modal -->
+    <div id="locationModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h3>❌ Location Verification Failed</h3>
+            <div id="modalMessage"></div>
+            <button class="btn-primary" id="modalOkBtn">OK</button>
+        </div>
+    </div>
+    <input type="hidden" id="login-username">
+    <script src="biometric-auth.js"></script>
+    <script src="script.js"></script>
+    
+</body>
+</html>
