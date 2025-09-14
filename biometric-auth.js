@@ -123,6 +123,77 @@ class BiometricAuth {
 
 
 
+    // Register biometric credential
+    async register() {
+        if (!this.isSupported()) {
+            throw new Error('WebAuthn is not supported in this browser');
+        }
+
+        const username = this.getUsername();
+        if (!username) {
+            throw new Error('Username is required for registration');
+        }
+
+        const challenge = this.generateChallenge();
+        const userId = this.stringToArrayBuffer(username);
+
+        const publicKeyCredentialCreationOptions = {
+            challenge: challenge,
+            rp: {
+                name: this.rpName,
+                id: window.location.hostname,
+            },
+            user: {
+                id: userId,
+                name: username,
+                displayName: username,
+            },
+            pubKeyCredParams: [
+                {
+                    alg: -7, // ES256
+                    type: "public-key"
+                }
+            ],
+            authenticatorSelection: {
+                authenticatorAttachment: "platform",
+                userVerification: this.userVerification,
+                requireResidentKey: false
+            },
+            timeout: this.timeout,
+            attestation: "direct"
+        };
+
+        try {
+            const credential = await navigator.credentials.create({
+                publicKey: publicKeyCredentialCreationOptions
+            });
+
+            if (!credential) {
+                throw new Error('Failed to create credential');
+            }
+
+            const credentialData = {
+                id: credential.id,
+                rawId: this.arrayBufferToBase64(credential.rawId),
+                type: credential.type,
+                username: username,
+                timestamp: Date.now()
+            };
+
+            localStorage.setItem(`biometric_${username}`, JSON.stringify(credentialData));
+            
+            return {
+                success: true,
+                credentialId: credential.id,
+                message: 'Biometric registration successful'
+            };
+
+        } catch (error) {
+            console.error('Registration error:', error);
+            throw new Error(`Registration failed: ${error.message}`);
+        }
+    }
+
     // Check if user has registered biometric
     hasStoredCredential(username = null) {
         const user = username || this.getUsername();

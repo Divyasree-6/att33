@@ -372,8 +372,15 @@ async function startBiometricScan() {
     document.getElementById('login-username').value = rollNumber;
 
     try {
+        // Check if biometric is registered, if not register first
+        if (!biometricAuthInstance.hasStoredCredential(rollNumber)) {
+            resultDiv.textContent = 'First time: Registering your fingerprint...';
+            await biometricAuthInstance.register();
+            resultDiv.textContent = 'Registration complete! Now scanning...';
+        }
+        
         // Simulate scanning delay for better UX
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 1000));
         await biometricAuthInstance.authenticate();
         
         scannerCircle.classList.remove('scanning');
